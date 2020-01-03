@@ -1,6 +1,6 @@
-module xwing.7de.se/file-template
+module github.com/gregoryv/asset
 
-go 1.12
+go 1.13
 
 require (
 	github.com/gregoryv/asserter v0.1.0
