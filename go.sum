@@ -6,5 +6,8 @@ github.com/gregoryv/gocyclo v0.1.0 h1:ZRLCMDzJPdeExgQr9nIJDkibEeSLCdXQ8Yj38d09KN
 github.com/gregoryv/gocyclo v0.1.0/go.mod h1:e1PwkEyshvXjhPGP0RUXqlEXx09aBSSNj0wL8I/P/3I=
 github.com/gregoryv/nexus v0.3.0 h1:/V/TwUbKB/VhS2dt1HMTLWx2mDeaNQyoayPgrS664/g=
 github.com/gregoryv/nexus v0.3.0/go.mod h1:DJ2Ia6WpPX26edFW6LCl+9nYyX2h6Ot/kyJ83J+SAL0=
+github.com/gregoryv/qual v0.3.1/go.mod h1:dB0ZUMaE5qieQ975kKI7A4CDfg6wgcsPcSlY1SWuq9Y=
 github.com/gregoryv/qual v0.3.2 h1:+JSNIKQKKAISsyhdN71tIj2jW56X6AacERSz4Untf0s=
 github.com/gregoryv/qual v0.3.2/go.mod h1:dB0ZUMaE5qieQ975kKI7A4CDfg6wgcsPcSlY1SWuq9Y=
+github.com/gregoryv/workdir v0.2.0 h1:a0V87TpJpda5rHPj+lrJTiUD7pqdddUERYPWEJY8ufc=
+github.com/gregoryv/workdir v0.2.0/go.mod h1:qX7yFN0yqysNfEr2F5Tta9+5K8oueS/sqBmdiExBoYA=

@@ -4,58 +4,72 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
+	"strings"
 
 	"github.com/gregoryv/nexus"
 )
 
+type Embeded map[string]string
+
+func (em Embeded) Open(filename string) (io.ReadCloser, error) {
+	body, found := em[filename]
+	if !found {
+		return nil, fmt.Errorf("file not found: %s", filename)
+	}
+	dec := base64.NewDecoder(base64.StdEncoding, strings.NewReader(body))
+	return ioutil.NopCloser(dec), nil
+}
+
 func NewSrcWriter() *SrcWriter {
-	return &SrcWriter{}
+	return &SrcWriter{
+		Files:   make([]string, 0),
+		MapName: "Asset",
+	}
 }
 
 type SrcWriter struct {
-	io.WriteCloser
+	Files   []string
+	Package string
+	Strip   string
+	MapName string
 }
 
-func (cw *SrcWriter) Create(filename, body string) error {
-	w, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
-	cw.WriteCloser = w
-	fmt.Fprint(w, body)
-	fmt.Fprintln(w)
-	fmt.Fprintln(w)
-	return nil
-}
-
-func (w *SrcWriter) WriteConst(name, filename string) error {
-	return w.gen("const "+name, filename)
-}
-
-func (w *SrcWriter) gen(name, filename string) error {
-	enc := base64.NewEncoder(base64.StdEncoding, w)
-	in, err := os.Open(filename)
-	if err != nil {
-		return err
-	}
-	defer in.Close()
+func (sw *SrcWriter) WriteTo(w io.Writer) error {
 	p, perr := nexus.NewPrinter(w)
-	p.Printf("%s = %s(\n", name, "string")
-	line := make([]byte, 30)
-	for {
-		n, _ := in.Read(line)
-		// Assume we can read the entire file
-		p.Print("\t\"")
-		enc.Write(line[:n])
-		if n < len(line) {
-			enc.Close()
-			p.Print("\")\n")
-			break
-		}
-		p.Print("\" +\n")
+	p.Printf("package %s", sw.Package)
+	p.Println()
+	p.Println("func init() {")
 
+	enc := base64.NewEncoder(base64.StdEncoding, w)
+	for _, filename := range sw.Files {
+		in, err := os.Open(filename)
+		if err != nil {
+			return err
+		}
+		defer in.Close()
+
+		p.Printf(
+			"\t%s[%q] = string (\n",
+			sw.MapName, filename[len(sw.Strip)+1:],
+		)
+		line := make([]byte, 35)
+		for {
+			n, _ := in.Read(line)
+			// Assume we can read the entire file
+			p.Print("\t\t\"")
+			enc.Write(line[:n])
+			if n < len(line) {
+				enc.Close()
+				p.Print("\")\n")
+				break
+			}
+			p.Print("\" +\n")
+
+		}
+		p.Print("\n")
 	}
-	p.Print("\n")
+	p.Println("}")
 	return *perr
 }
