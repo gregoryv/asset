@@ -44,7 +44,8 @@ func (w *SrcWriter) gen(name, filename string) error {
 	p.Printf("%s = %s(\n", name, "string")
 	line := make([]byte, 30)
 	for {
-		n, err := in.Read(line)
+		n, _ := in.Read(line)
+		// Assume we can read the entire file
 		p.Print("\t\"")
 		enc.Write(line[:n])
 		if n < len(line) {
@@ -53,10 +54,7 @@ func (w *SrcWriter) gen(name, filename string) error {
 			break
 		}
 		p.Print("\" +\n")
-		if err != nil {
-			fmt.Println(err)
-			break
-		}
+
 	}
 	p.Print("\n")
 	return *perr
