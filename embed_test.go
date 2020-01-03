@@ -17,7 +17,7 @@ func Test_gen(t *testing.T) {
 	sw := asset.NewSrcWriter()
 	sw.Files = []string{wd.Join("index.html")}
 	sw.Package = "x"
-	sw.Strip = string(wd)
+	sw.Strip = string(wd) + "/"
 	w, _ := os.Create("internal/x/out.go")
 	err := sw.WriteTo(w)
 	w.Close()

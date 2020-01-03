@@ -52,7 +52,7 @@ func (sw *SrcWriter) WriteTo(w io.Writer) error {
 
 		p.Printf(
 			"\t%s[%q] = string (\n",
-			sw.MapName, filename[len(sw.Strip)+1:],
+			sw.MapName, filename[len(sw.Strip):],
 		)
 		line := make([]byte, 35)
 		for {
