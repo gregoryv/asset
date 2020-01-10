@@ -15,17 +15,5 @@ func Test_generated(t *testing.T) {
 	assert := asserter.New(t)
 	assert(err == nil).Error(err)
 	// same as htmlData in asset package
-	assert().Contains(got, `
-<!DOCTYPE html>
-
-<html>
-  <head>
-    <meta charset="utf-8">
-  </head>
-  <body>
-
-  </body>
-</html>
-`)
-
+	assert().Contains(got, `<!DOCTYPE html>`)
 }

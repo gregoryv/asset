@@ -35,8 +35,23 @@ var htmlData = []byte(`
 <html>
   <head>
     <meta charset="utf-8">
+    <script src="{{ .AppUri }}"></script>
+    <style type="text/css">
+      html, body { margin: 0 0; padding: 0 0 }
+      body { padding: 1em 1.62em 0em 1.62em }
+      h1 { margin-top: 0 }
+    </style>
   </head>
-  <body>
+  <body onload="parseToken()">
+
+    <h1 id="title">Unauthorized</h1>
+    <a href="{{ .RedirectUri }}" id="login">login</a>
+
+    <h2>Token</h2>
+    <span id="token_content">-</span>
+
+    <h2>Session</h2>
+    <span id="session">-</span>
 
   </body>
 </html>

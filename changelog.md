@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.2.0] 2020-01-10
 ### Changed
 
+- Use base64.RawStdEncoding
 - gofmt compatible output
 - Rewrote SrcWriter using type.Embeded
 

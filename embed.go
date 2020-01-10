@@ -43,7 +43,7 @@ func (sw *SrcWriter) WriteTo(w io.Writer) error {
 	p.Println()
 	p.Println("func init() {")
 
-	enc := base64.NewEncoder(base64.StdEncoding, w)
+	enc := base64.NewEncoder(base64.RawStdEncoding, w)
 	for _, filename := range sw.Files {
 		in, err := os.Open(filename)
 		if err != nil {
