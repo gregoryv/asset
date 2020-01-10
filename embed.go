@@ -38,7 +38,8 @@ type SrcWriter struct {
 
 func (sw *SrcWriter) WriteTo(w io.Writer) error {
 	p, perr := nexus.NewPrinter(w)
-	p.Printf("package %s", sw.Package)
+	p.Printf("package %s\n\n", sw.Package)
+	p.Println("import \"strings\"")
 	p.Println()
 	p.Println("func init() {")
 
@@ -51,7 +52,7 @@ func (sw *SrcWriter) WriteTo(w io.Writer) error {
 		defer in.Close()
 
 		p.Printf(
-			"\t%s[%q] = string (\n",
+			"\t%s[%q] = strings.Join([]string{\n",
 			sw.MapName, filename[len(sw.Strip):],
 		)
 		line := make([]byte, 35)
@@ -60,13 +61,13 @@ func (sw *SrcWriter) WriteTo(w io.Writer) error {
 			// Assume we can read the entire file
 			p.Print("\t\t\"")
 			enc.Write(line[:n])
+			p.Print("\",\n")
 			if n < len(line) {
 				enc.Close()
-				p.Print("\")\n")
+				p.Print("\t")
+				p.Println(`}, "")`)
 				break
 			}
-			p.Print("\" +\n")
-
 		}
 		p.Print("\n")
 	}

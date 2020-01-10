@@ -2,6 +2,7 @@ package asset_test
 
 import (
 	"os"
+	"os/exec"
 	"testing"
 
 	"github.com/gregoryv/asserter"
@@ -18,11 +19,14 @@ func Test_gen(t *testing.T) {
 	sw.Files = []string{wd.Join("index.html")}
 	sw.Package = "x"
 	sw.Strip = string(wd) + "/"
-	w, _ := os.Create("internal/x/out.go")
+	out := "internal/x/out.go"
+	w, _ := os.Create(out)
 	err := sw.WriteTo(w)
 	w.Close()
 	assert := asserter.New(t)
 	assert(err == nil).Error(err)
+	res, err := exec.Command("gofmt", "-d", out).Output()
+	assert(len(res) == 0).Errorf("%q", string(res))
 }
 
 var htmlData = []byte(`
